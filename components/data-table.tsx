@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,7 +13,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -22,18 +22,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Trash2 } from "lucide-react"
+import { useConfirm  } from "@/hooks/use-confirm";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Trash2 } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -50,6 +51,11 @@ export function DataTable<TData, TValue>({
   onDelete,
   disabled
 }: DataTableProps<TData, TValue>) {
+  const [ConfirmDialog, confirm] = useConfirm(
+    "Are you sure?",
+    "You are about to perform a Bulk Delete!"
+  )
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -78,6 +84,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <ConfirmDialog />
       <div className="flex items-center py-4">
         <Input
           placeholder={`Filter ${filterKey}...`}
@@ -183,16 +190,24 @@ export function DataTable<TData, TValue>({
         </Button>        
       </div>
       {table.getFilteredSelectedRowModel().rows.length > 0 && (
-          <Button
-          disabled={disabled}
-            size="sm"
-            variant="destructive"
-            className=" font-normal text-xs"
-          >
-            <Trash2 className="size-4"/>
-            Delete ({table.getFilteredSelectedRowModel().rows.length})
-          </Button>
-        )}
+        <Button
+        disabled={disabled}
+          size="sm"
+          variant="destructive"
+          className=" font-normal text-xs"
+          onClick={async () => {
+            const ok = await confirm();
+
+            if (ok) {
+              onDelete(table.getFilteredSelectedRowModel().rows)
+              table.resetRowSelection();
+            }
+          }}
+        >
+          <Trash2 className="size-4"/>
+          Delete ({table.getFilteredSelectedRowModel().rows.length})
+        </Button>
+      )}
     </div>
   )
 }
