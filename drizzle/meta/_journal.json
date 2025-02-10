@@ -22,6 +22,13 @@
       "when": 1739107283483,
       "tag": "0002_serious_the_spike",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1739200464552,
+      "tag": "0003_perfect_the_executioner",
+      "breakpoints": true
     }
   ]
 }
