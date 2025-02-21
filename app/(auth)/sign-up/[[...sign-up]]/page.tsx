@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <div className='min-h-screen grid grid-cols-1 lg:grid-cols-2'>
         <div className='h-full bg-green-600 hidden lg:flex items-center justify-center'>
-            <Image src="/globe.svg" height={100} width={100} alt='Logo' />
+            <Image src="/logo.svg" height={100} width={100} alt='Logo' />
         </div>
         <div className='h-full lg:flex flex-col items-center justify-center px-4'>
             <div className='text-center space-y-4 pt-16'>
